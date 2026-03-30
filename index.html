@@ -3,25 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartTools Hub | All-in-One Utility</title>
+    <title>SmartTools Pro | All-in-One Dashboard</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <nav>
-        <div class="logo">🛠️ SmartTools Hub</div>
-        <button id="theme-toggle">🌓 Mode</button>
+        <div class="logo">🚀 SmartTools<span>Pro</span></div>
+        <div class="nav-right">
+            <input type="text" id="toolSearch" placeholder="Search 36+ tools..." onkeyup="searchTool()">
+            <button id="theme-toggle">🌓</button>
+        </div>
     </nav>
 
-    <div class="main-container">
+    <div class="layout">
         <aside class="sidebar">
-            <button class="nav-btn active" onclick="loadTools('health')">💪 Health</button>
-            <button class="nav-btn" onclick="loadTools('finance')">💰 Finance</button>
-            <button class="nav-btn" onclick="loadTools('tech')">🌐 Tech</button>
-            <button class="nav-btn" onclick="loadTools('unit')">📏 Units</button>
+            <button class="menu-btn active" onclick="filterTools('all')">🏠 All Tools</button>
+            <button class="menu-btn" onclick="filterTools('basic')">🧮 Basic</button>
+            <button class="menu-btn" onclick="filterTools('health')">💪 Health</button>
+            <button class="menu-btn" onclick="filterTools('finance')">💰 Finance</button>
+            <button class="menu-btn" onclick="filterTools('edu')">📚 Education</button>
+            <button class="menu-btn" onclick="filterTools('tech')">🌐 Tech</button>
+            <button class="menu-btn" onclick="filterTools('daily')">🏠 Daily</button>
         </aside>
 
-        <main id="app-content">
-            </main>
+        <main class="content">
+            <div id="tool-grid" class="grid"></div>
+        </main>
+    </div>
+
+    <div id="toolModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="modal-body"></div>
+        </div>
     </div>
 
     <script src="script.js"></script>
