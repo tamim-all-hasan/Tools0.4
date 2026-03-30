@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartTools Hub | All-in-One Utility</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav>
+        <div class="logo">🛠️ SmartTools Hub</div>
+        <button id="theme-toggle">🌓 Mode</button>
+    </nav>
+
+    <div class="main-container">
+        <aside class="sidebar">
+            <button class="nav-btn active" onclick="loadTools('health')">💪 Health</button>
+            <button class="nav-btn" onclick="loadTools('finance')">💰 Finance</button>
+            <button class="nav-btn" onclick="loadTools('tech')">🌐 Tech</button>
+            <button class="nav-btn" onclick="loadTools('unit')">📏 Units</button>
+        </aside>
+
+        <main id="app-content">
+            </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
