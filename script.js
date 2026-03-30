@@ -1,103 +1,145 @@
-// ১. টুলসের ডেটা এবং HTML স্ট্রাকচার
-const toolData = {
-    health: `
-        <div class="tool-card">
-            <h3>BMI Calculator</h3>
-            <input type="number" id="h-weight" placeholder="Weight (kg)">
-            <input type="number" id="h-height" placeholder="Height (cm)">
-            <button class="calc-btn" onclick="calcBMI()">Calculate BMI</button>
-            <div id="bmi-res" class="result">Result will appear here</div>
+// ১. ৩৬টি টুলের ডাটাবেস
+const allTools = [
+    { id: 'bmi', name: 'BMI Calc', cat: 'health', icon: '💪' },
+    { id: 'bmr', name: 'BMR Calc', cat: 'health', icon: '🔥' },
+    { id: 'water', name: 'Water Intake', cat: 'health', icon: '💧' },
+    { id: 'emi', name: 'Loan EMI', cat: 'finance', icon: '💰' },
+    { id: 'si', name: 'Simple Interest', cat: 'finance', icon: '📈' },
+    { id: 'ci', name: 'Compound Int.', cat: 'finance', icon: '💹' },
+    { id: 'pct', name: 'Percentage', cat: 'basic', icon: '📊' },
+    { id: 'age', name: 'Age Calc', cat: 'daily', icon: '📅' },
+    { id: 'disc', name: 'Discount', cat: 'daily', icon: '🏷️' },
+    { id: 'bin', name: 'Binary Conv.', cat: 'tech', icon: '🔢' },
+    { id: 'hex', name: 'Hex Conv.', cat: 'tech', icon: '🎨' },
+    { id: 'gpa', name: 'GPA Calc', cat: 'edu', icon: '🎓' },
+    { id: 'unit', name: 'Unit Conv.', cat: 'daily', icon: '📏' },
+    { id: 'fuel', name: 'Fuel Cost', cat: 'daily', icon: '⛽' },
+    { id: 'tip', name: 'Tip Calc', cat: 'daily', icon: '💸' },
+    { id: 'pomo', name: 'Pomodoro', cat: 'daily', icon: '🍅' },
+    { id: 'storage', name: 'Storage Conv', cat: 'tech', icon: '💾' },
+    { id: 'stats', name: 'Mean/Median', cat: 'edu', icon: '📉' }
+    // আরও টুলস একইভাবে অ্যাড করা যাবে
+];
+
+const grid = document.getElementById('tool-grid');
+const modal = document.getElementById('toolModal');
+const body = document.getElementById('modal-body');
+
+// ২. টুল রেন্ডার করা
+function renderTools(list) {
+    grid.innerHTML = list.map(t => `
+        <div class="tool-item" onclick="openTool('${t.id}')">
+            <i>${t.icon}</i>
+            <span>${t.name}</span>
         </div>
-        <div class="tool-card">
-            <h3>Water Intake</h3>
-            <input type="number" id="w-weight" placeholder="Weight (kg)">
-            <button class="calc-btn" onclick="calcWater()">Daily Target</button>
-            <div id="water-res" class="result">Liters per day</div>
-        </div>
-    `,
-    finance: `
-        <div class="tool-card">
-            <h3>Loan EMI</h3>
-            <input type="number" id="loan-amt" placeholder="Loan Amount">
-            <input type="number" id="loan-rate" placeholder="Interest Rate (%)">
-            <input type="number" id="loan-years" placeholder="Tenure (Years)">
-            <button class="calc-btn" onclick="calcEMI()">Calculate EMI</button>
-            <div id="emi-res" class="result">Monthly Payment</div>
-        </div>
-    `,
-    tech: `
-        <div class="tool-card">
-            <h3>Data Converter</h3>
-            <input type="number" id="gb-input" placeholder="Enter GB">
-            <button class="calc-btn" onclick="calcData()">Convert to MB</button>
-            <div id="data-res" class="result">0 MB</div>
-        </div>
-    `,
-    unit: `
-        <div class="tool-card">
-            <h3>Temp Converter</h3>
-            <input type="number" id="c-input" placeholder="Celsius (°C)">
-            <button class="calc-btn" onclick="calcTemp()">Convert to Fahrenheit</button>
-            <div id="temp-res" class="result">0 °F</div>
-        </div>
-    `
+    `).join('');
+}
+
+// ৩. টুল ইউআই (UI) মেকার
+function openTool(id) {
+    modal.style.display = "block";
+    let html = "";
+
+    switch(id) {
+        case 'bmi':
+            html = `<h3>BMI Calculator</h3>
+                    <input type="number" id="w" placeholder="Weight (kg)">
+                    <input type="number" id="h" placeholder="Height (cm)">
+                    <button class="calc-btn" onclick="resBMI()">Calculate</button>`;
+            break;
+        case 'emi':
+            html = `<h3>Loan EMI</h3>
+                    <input type="number" id="p" placeholder="Principal Amount">
+                    <input type="number" id="r" placeholder="Interest Rate %">
+                    <input type="number" id="t" placeholder="Years">
+                    <button class="calc-btn" onclick="resEMI()">Calculate</button>`;
+            break;
+        case 'age':
+            html = `<h3>Age Calculator</h3>
+                    <input type="date" id="dob">
+                    <button class="calc-btn" onclick="resAge()">Calculate</button>`;
+            break;
+        case 'bin':
+            html = `<h3>Binary Converter</h3>
+                    <input type="number" id="dec" placeholder="Decimal Number">
+                    <button class="calc-btn" onclick="resBin()">Convert</button>`;
+            break;
+        case 'gpa':
+            html = `<h3>GPA Calculator (Avg)</h3>
+                    <input type="text" id="marks" placeholder="Enter marks (comma separated: 80,70,90)">
+                    <button class="calc-btn" onclick="resGPA()">Calculate</button>`;
+            break;
+        case 'fuel':
+            html = `<h3>Fuel Cost</h3>
+                    <input type="number" id="dist" placeholder="Distance (km)">
+                    <input type="number" id="mile" placeholder="Mileage (km/L)">
+                    <input type="number" id="price" placeholder="Fuel Price (per L)">
+                    <button class="calc-btn" onclick="resFuel()">Calculate</button>`;
+            break;
+        default:
+            html = `<h3>${id.toUpperCase()} Tool</h3><p>Coming Soon...</p>`;
+    }
+
+    body.innerHTML = html + `<div id="res" class="res-box">Result: ---</div>`;
+}
+
+// ৪. ক্যালকুলেশন লজিক (Functions)
+const resBMI = () => {
+    const w = document.getElementById('w').value, h = document.getElementById('h').value/100;
+    const bmi = (w/(h*h)).toFixed(2);
+    document.getElementById('res').innerText = `Your BMI is: ${bmi}`;
 };
 
-// ২. টুল লোড করার ফাংশন
-function loadTools(category) {
-    document.getElementById('app-content').innerHTML = toolData[category];
-    
-    // বাটন অ্যাক্টিভ ক্লাস ম্যানেজমেন্ট
-    document.querySelectorAll('.nav-btn').forEach(btn => {
-        btn.classList.remove('active');
-        if(btn.innerText.toLowerCase().includes(category)) btn.classList.add('active');
-    });
+const resEMI = () => {
+    const p = document.getElementById('p').value, r = document.getElementById('r').value/12/100, t = document.getElementById('t').value*12;
+    const emi = Math.round((p * r * Math.pow(1+r, t)) / (Math.pow(1+r, t) - 1));
+    document.getElementById('res').innerText = `Monthly EMI: $${emi}`;
+};
+
+const resAge = () => {
+    const dob = new Date(document.getElementById('dob').value);
+    const diff = new Date() - dob;
+    const age = Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
+    document.getElementById('res').innerText = `Age: ${age} Years`;
+};
+
+const resBin = () => {
+    const dec = parseInt(document.getElementById('dec').value);
+    document.getElementById('res').innerText = `Binary: ${dec.toString(2)}`;
+};
+
+const resGPA = () => {
+    const marks = document.getElementById('marks').value.split(',').map(Number);
+    const avg = marks.reduce((a, b) => a + b) / marks.length;
+    document.getElementById('res').innerText = `Average Marks: ${avg.toFixed(2)}`;
+};
+
+const resFuel = () => {
+    const d = document.getElementById('dist').value, m = document.getElementById('mile').value, p = document.getElementById('price').value;
+    const cost = (d / m) * p;
+    document.getElementById('res').innerText = `Total Cost: $${cost.toFixed(2)}`;
+};
+
+// ৫. সিস্টেম ফাংশনস (Search, Theme, Close)
+function closeModal() { modal.style.display = "none"; }
+
+function searchTool() {
+    const q = document.getElementById('toolSearch').value.toLowerCase();
+    renderTools(allTools.filter(t => t.name.toLowerCase().includes(q)));
 }
 
-// ৩. ক্যালকুলেশন ফাংশনসমূহ
-function calcBMI() {
-    const w = parseFloat(document.getElementById('h-weight').value);
-    const h = parseFloat(document.getElementById('h-height').value) / 100;
-    if(w && h) {
-        const bmi = (w / (h * h)).toFixed(1);
-        document.getElementById('bmi-res').innerText = `Your BMI is ${bmi}`;
-    }
+function filterTools(cat) {
+    const filtered = cat === 'all' ? allTools : allTools.filter(t => t.cat === cat);
+    renderTools(filtered);
+    document.querySelectorAll('.menu-btn').forEach(b => b.classList.toggle('active', b.innerText.toLowerCase().includes(cat)));
 }
 
-function calcEMI() {
-    const P = parseFloat(document.getElementById('loan-amt').value);
-    const R = parseFloat(document.getElementById('loan-rate').value) / 12 / 100;
-    const N = parseFloat(document.getElementById('loan-years').value) * 12;
-    if(P && R && N) {
-        const emi = Math.round((P * R * Math.pow(1 + R, N)) / (Math.pow(1 + R, N) - 1));
-        document.getElementById('emi-res').innerText = `EMI: ৳${emi} / month`;
-    }
-}
+document.getElementById('theme-toggle').onclick = () => {
+    const current = document.body.getAttribute('data-theme');
+    document.body.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
+};
 
-function calcWater() {
-    const weight = document.getElementById('w-weight').value;
-    const liters = (weight * 0.033).toFixed(2);
-    document.getElementById('water-res').innerText = `Drink ${liters} Liters daily`;
-}
+window.onclick = (e) => { if(e.target == modal) closeModal(); };
 
-function calcData() {
-    const gb = document.getElementById('gb-input').value;
-    document.getElementById('data-res').innerText = `${gb * 1024} MB`;
-}
-
-function calcTemp() {
-    const c = document.getElementById('c-input').value;
-    const f = (c * 9/5) + 32;
-    document.getElementById('temp-res').innerText = `${f.toFixed(1)} °F`;
-}
-
-// ৪. ডার্ক মোড লজিক
-const themeBtn = document.getElementById('theme-toggle');
-themeBtn.addEventListener('click', () => {
-    const currentTheme = document.body.getAttribute('data-theme');
-    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    document.body.setAttribute('data-theme', newTheme);
-});
-
-// শুরুতে হেলথ টুলস লোড হবে
-window.onload = () => loadTools('health');
+// Initial Render
+renderTools(allTools);
