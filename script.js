@@ -15,9 +15,7 @@ const allTools = [
     { id: 'unit', name: 'Unit Conv.', cat: 'daily', icon: '📏' },
     { id: 'fuel', name: 'Fuel Cost', cat: 'daily', icon: '⛽' },
     { id: 'tip', name: 'Tip Calc', cat: 'daily', icon: '💸' },
-    { id: 'pomo', name: 'Pomodoro', cat: 'daily', icon: '🍅' },
-    { id: 'storage', name: 'Storage Conv', cat: 'tech', icon: '💾' },
-    { id: 'stats', name: 'Mean/Median', cat: 'edu', icon: '📉' }
+   
     // আরও টুলস একইভাবে অ্যাড করা যাবে
 ];
 
@@ -104,14 +102,7 @@ function openTool(id) {
     html = `<h3>Decimal to Hex Converter</h3>
             <input type="number" id="dec_num" placeholder="Enter Decimal Number (e.g. 255)">
             <button class="calc-btn" onclick="resHex()">Convert to Hex</button>`;
-    break;
-            case 'pomodoro':
-    html = `<h3>Pomodoro Timer</h3>
-            <input type="number" id="pomo_time" placeholder="Minutes (e.g. 25)">
-            <button class="calc-btn" onclick="startPomo()">Start</button>
-            <button class="calc-btn" onclick="stopPomo()">Stop</button>
-            <h2 id="pomo_display">00:00</h2>`;
-    break;
+    break;         
 
 case 'unit':
     html = `<h3>Length Converter</h3>
