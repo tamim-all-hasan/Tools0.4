@@ -47,6 +47,17 @@ function openTool(id) {
                     <input type="number" id="h" placeholder="Height (cm)">
                     <button class="calc-btn" onclick="resBMI()">Calculate</button>`;
             break;
+            case 'bmr':
+    html = `<h3>BMR Calculator</h3>
+            <select id="gen">
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select>
+            <input type="number" id="age_val" placeholder="Age (Years)">
+            <input type="number" id="w_val" placeholder="Weight (kg)">
+            <input type="number" id="h_val" placeholder="Height (cm)">
+            <button class="calc-btn" onclick="resBMR()">Calculate BMR</button>`;
+            break;
         case 'emi':
             html = `<h3>Loan EMI</h3>
                     <input type="number" id="p" placeholder="Principal Amount">
@@ -88,6 +99,29 @@ const resBMI = () => {
     const w = document.getElementById('w').value, h = document.getElementById('h').value/100;
     const bmi = (w/(h*h)).toFixed(2);
     document.getElementById('res').innerText = `Your BMI is: ${bmi}`;
+};
+
+const resBMR = () => {
+    const gender = document.getElementById('gen').value;
+    const age = parseFloat(document.getElementById('age_val').value);
+    const weight = parseFloat(document.getElementById('w_val').value);
+    const height = parseFloat(document.getElementById('h_val').value);
+
+    if (age && weight && height) {
+        let bmr = 0;
+        if (gender === 'male') {
+            bmr = (10 * weight) + (6.25 * height) - (5 * age) + 5;
+        } else {
+            bmr = (10 * weight) + (6.25 * height) - (5 * age) - 161;
+        }
+
+        document.getElementById('res').innerHTML = `
+            Your BMR: <strong>${bmr.toFixed(2)} kcal/day</strong><br>
+            <small style="color:gray; font-size:12px;">This is the energy your body needs at rest.</small>
+        `;
+    } else {
+        document.getElementById('res').innerText = "Please fill all fields!";
+    }
 };
 
 const resEMI = () => {
