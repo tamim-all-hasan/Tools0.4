@@ -98,6 +98,19 @@ function openTool(id) {
                     <input type="text" id="marks" placeholder="Enter marks (comma separated: 80,70,90)">
                     <button class="calc-btn" onclick="resGPA()">Calculate</button>`;
             break;
+            case 'ci':
+    html = `<h3>Compound Interest</h3>
+            <input type="number" id="ci_p" placeholder="Principal Amount (৳)">
+            <input type="number" id="ci_r" placeholder="Annual Interest Rate (%)">
+            <input type="number" id="ci_t" placeholder="Time (Years)">
+            <select id="ci_n">
+                <option value="1">Compounded Annually (Yearly)</option>
+                <option value="4">Compounded Quarterly (3 Months)</option>
+                <option value="12">Compounded Monthly</option>
+                <option value="365">Compounded Daily</option>
+            </select>
+            <button class="calc-btn" onclick="resCI()">Calculate Total</button>`;
+    break;
         case 'fuel':
             html = `<h3>Fuel Cost</h3>
                     <input type="number" id="dist" placeholder="Distance (km)">
@@ -139,6 +152,26 @@ const resBMR = () => {
         `;
     } else {
         document.getElementById('res').innerText = "Please fill all fields!";
+    }
+};
+const resCI = () => {
+    const p = parseFloat(document.getElementById('ci_p').value);
+    const r = parseFloat(document.getElementById('ci_r').value) / 100;
+    const t = parseFloat(document.getElementById('ci_t').value);
+    const n = parseInt(document.getElementById('ci_n').value);
+
+    if (p > 0 && r > 0 && t > 0) {
+        // Formula: A = P * (1 + r/n)^(n*t)
+        const amount = p * Math.pow((1 + r / n), (n * t));
+        const interest = amount - p;
+
+        document.getElementById('res').innerHTML = `
+            Total Amount: <strong>৳${amount.toLocaleString(undefined, {maximumFractionDigits: 2})}</strong><br>
+            Compound Interest: <strong>৳${interest.toLocaleString(undefined, {maximumFractionDigits: 2})}</strong><br>
+            <small style="color:var(--primary);">Compounded ${n} times per year</small>
+        `;
+    } else {
+        document.getElementById('res').innerText = "Please enter valid values!";
     }
 };
 
