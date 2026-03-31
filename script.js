@@ -93,6 +93,44 @@ function openTool(id) {
                     <input type="number" id="dec" placeholder="Decimal Number">
                     <button class="calc-btn" onclick="resBin()">Convert</button>`;
             break;
+            case 'hex':
+    html = `<h3>Decimal to Hex Converter</h3>
+            <input type="number" id="dec_num" placeholder="Enter Decimal Number (e.g. 255)">
+            <button class="calc-btn" onclick="resHex()">Convert to Hex</button>`;
+    break;
+
+case 'unit':
+    html = `<h3>Length Converter</h3>
+            <input type="number" id="unit_val" placeholder="Enter Value">
+            <div style="display: flex; gap: 10px;">
+                <select id="from_unit">
+                    <option value="m">Meter (m)</option>
+                    <option value="km">Kilometer (km)</option>
+                    <option value="ft">Feet (ft)</option>
+                    <option value="inch">Inch (in)</option>
+                </select>
+                <span style="align-self: center;">to</span>
+                <select id="to_unit">
+                    <option value="m">Meter (m)</option>
+                    <option value="km">Kilometer (km)</option>
+                    <option value="ft">Feet (ft)</option>
+                    <option value="inch">Inch (in)</option>
+                </select>
+            </div>
+            <button class="calc-btn" onclick="resUnit()">Convert Unit</button>`;
+    break;
+            case 'pct':
+    html = `<h3>Percentage Calculator</h3>
+            <p>What is <input type="number" id="p_val" style="width:80px; display:inline;"> % of <input type="number" id="t_val" style="width:120px; display:inline;"></p>
+            <button class="calc-btn" onclick="resPct()">Calculate</button>`;
+    break;
+
+case 'disc':
+    html = `<h3>Discount Calculator</h3>
+            <input type="number" id="orig_price" placeholder="Original Price (৳)">
+            <input type="number" id="disc_pct" placeholder="Discount Percentage (%)">
+            <button class="calc-btn" onclick="resDisc()">Calculate Discount</button>`;
+    break;
         case 'gpa':
             html = `<h3>GPA Calculator (Avg)</h3>
                     <input type="text" id="marks" placeholder="Enter marks (comma separated: 80,70,90)">
@@ -174,6 +212,38 @@ const resCI = () => {
         document.getElementById('res').innerText = "Please enter valid values!";
     }
 };
+// Percentage Logic
+const resPct = () => {
+    const p = parseFloat(document.getElementById('p_val').value);
+    const t = parseFloat(document.getElementById('t_val').value);
+
+    if (p >= 0 && t > 0) {
+        const result = (p / 100) * t;
+        document.getElementById('res').innerHTML = `
+            ${p}% of ${t} is: <strong>${result.toFixed(2)}</strong>
+        `;
+    } else {
+        document.getElementById('res').innerText = "Please enter valid numbers!";
+    }
+};
+
+// Discount Logic
+const resDisc = () => {
+    const price = parseFloat(document.getElementById('orig_price').value);
+    const discount = parseFloat(document.getElementById('disc_pct').value);
+
+    if (price > 0 && discount >= 0) {
+        const savings = (price * discount) / 100;
+        const finalPrice = price - savings;
+
+        document.getElementById('res').innerHTML = `
+            Final Price: <strong>৳${finalPrice.toLocaleString()}</strong><br>
+            You Save: <span style="color: #10b981;">৳${savings.toLocaleString()}</span>
+        `;
+    } else {
+        document.getElementById('res').innerText = "Please enter valid price and discount!";
+    }
+};
 
 const resEMI = () => {
     const p = document.getElementById('p').value, r = document.getElementById('r').value/12/100, t = document.getElementById('t').value*12;
@@ -218,6 +288,43 @@ const resSI = () => {
         `;
     } else {
         document.getElementById('res').innerText = "Please enter valid values!";
+    }
+};
+// Hex Converter Logic
+const resHex = () => {
+    const dec = parseInt(document.getElementById('dec_num').value);
+    if (!isNaN(dec)) {
+        const hex = dec.toString(16).toUpperCase();
+        document.getElementById('res').innerHTML = `
+            Decimal: <strong>${dec}</strong><br>
+            Hexadecimal: <strong style="color:var(--primary);">#${hex}</strong>
+        `;
+    } else {
+        document.getElementById('res').innerText = "Please enter a valid decimal number!";
+    }
+};
+
+// Unit Converter Logic (Length)
+const resUnit = () => {
+    const val = parseFloat(document.getElementById('unit_val').value);
+    const from = document.getElementById('from_unit').value;
+    const to = document.getElementById('to_unit').value;
+
+    if (val >= 0) {
+        // মিটারকে বেস ইউনিট ধরে কনভার্ট করা (মিটার ফ্যাক্টর)
+        const factors = { m: 1, km: 1000, ft: 0.3048, inch: 0.0254 };
+
+        // বেস মিটারে রূপান্তর (Meter)
+        const valInMeters = val * factors[from];
+        // আউটপুট ইউনিটে রূপান্তর
+        const result = valInMeters / factors[to];
+
+        document.getElementById('res').innerHTML = `
+            Result: <strong>${result.toFixed(4)} ${to.toUpperCase()}</strong><br>
+            <small style="color:gray;">${val} ${from} = ${result.toFixed(4)} ${to}</small>
+        `;
+    } else {
+        document.getElementById('res').innerText = "Please enter a positive value!";
     }
 };
 
