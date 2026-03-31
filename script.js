@@ -69,6 +69,13 @@ function openTool(id) {
             </select>
             <button class="calc-btn" onclick="resWater()">Calculate Target</button>`;
             break;
+            case 'tip':
+    html = `<h3>Tip Calculator</h3>
+            <input type="number" id="tip_bill" placeholder="Bill Amount (৳)">
+            <input type="number" id="tip_percent" placeholder="Tip (%)">
+            <input type="number" id="tip_people" placeholder="Number of People">
+            <button class="calc-btn" onclick="resTip()">Calculate Tip</button>`;
+    break;
         case 'emi':
             html = `<h3>Loan EMI</h3>
                     <input type="number" id="p" placeholder="Principal Amount">
@@ -97,6 +104,13 @@ function openTool(id) {
     html = `<h3>Decimal to Hex Converter</h3>
             <input type="number" id="dec_num" placeholder="Enter Decimal Number (e.g. 255)">
             <button class="calc-btn" onclick="resHex()">Convert to Hex</button>`;
+    break;
+            case 'pomodoro':
+    html = `<h3>Pomodoro Timer</h3>
+            <input type="number" id="pomo_time" placeholder="Minutes (e.g. 25)">
+            <button class="calc-btn" onclick="startPomo()">Start</button>
+            <button class="calc-btn" onclick="stopPomo()">Stop</button>
+            <h2 id="pomo_display">00:00</h2>`;
     break;
 
 case 'unit':
@@ -168,6 +182,60 @@ const resBMI = () => {
     const w = document.getElementById('w').value, h = document.getElementById('h').value/100;
     const bmi = (w/(h*h)).toFixed(2);
     document.getElementById('res').innerText = `Your BMI is: ${bmi}`;
+};
+// Tip Calculator Logic
+const resTip = () => {
+    const bill = parseFloat(document.getElementById('tip_bill').value);
+    const percent = parseFloat(document.getElementById('tip_percent').value);
+    const people = parseInt(document.getElementById('tip_people').value);
+
+    if (bill > 0 && percent >= 0 && people > 0) {
+        const tip = (bill * percent) / 100;
+        const total = bill + tip;
+        const perPerson = total / people;
+
+        document.getElementById('res').innerHTML = `
+            Tip: <strong>৳${tip.toFixed(2)}</strong><br>
+            Total: <strong>৳${total.toFixed(2)}</strong><br>
+            Per Person: <strong style="color:var(--primary);">৳${perPerson.toFixed(2)}</strong>
+        `;
+    } else {
+        document.getElementById('res').innerText = "Enter valid values!";
+    }
+};
+
+// Pomodoro Logic
+let pomoInterval;
+
+const startPomo = () => {
+    let minutes = parseInt(document.getElementById('pomo_time').value);
+
+    if (minutes > 0) {
+        let time = minutes * 60;
+
+        clearInterval(pomoInterval);
+
+        pomoInterval = setInterval(() => {
+            let min = Math.floor(time / 60);
+            let sec = time % 60;
+
+            document.getElementById('pomo_display').innerText =
+                `${String(min).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+
+            time--;
+
+            if (time < 0) {
+                clearInterval(pomoInterval);
+                alert("Time's up!");
+            }
+        }, 1000);
+    } else {
+        alert("Enter valid time!");
+    }
+};
+
+const stopPomo = () => {
+    clearInterval(pomoInterval);
 };
 
 const resBMR = () => {
