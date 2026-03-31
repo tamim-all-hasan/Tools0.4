@@ -75,6 +75,13 @@ function openTool(id) {
                     <input type="number" id="r" placeholder="Interest Rate %">
                     <input type="number" id="t" placeholder="Years">
                     <button class="calc-btn" onclick="resEMI()">Calculate</button>`;
+                break;
+            case 'si':
+                html = `<h3>Simple Interest Calculator</h3>
+            <input type="number" id="p_amt" placeholder="Principal Amount (৳)">
+            <input type="number" id="r_rate" placeholder="Annual Interest Rate (%)">
+            <input type="number" id="t_year" placeholder="Time (Years)">
+            <button class="calc-btn" onclick="resSI()">Calculate Interest</button>`;
             break;
         case 'age':
             html = `<h3>Age Calculator</h3>
@@ -159,6 +166,25 @@ const resWater = () => {
         `;
     } else {
         document.getElementById('res').innerText = "Please enter a valid weight!";
+    }
+};
+
+const resSI = () => {
+    const p = parseFloat(document.getElementById('p_amt').value);
+    const r = parseFloat(document.getElementById('r_rate').value);
+    const t = parseFloat(document.getElementById('t_year').value);
+
+    if (p > 0 && r > 0 && t > 0) {
+        const interest = (p * r * t) / 100;
+        const total = p + interest;
+
+        document.getElementById('res').innerHTML = `
+            Interest: <strong>৳${interest.toLocaleString()}</strong><br>
+            Total Amount: <strong>৳${total.toLocaleString()}</strong><br>
+            <small style="color:gray;">Principal: ৳${p.toLocaleString()}</small>
+        `;
+    } else {
+        document.getElementById('res').innerText = "Please enter valid values!";
     }
 };
 
