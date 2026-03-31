@@ -58,6 +58,17 @@ function openTool(id) {
             <input type="number" id="h_val" placeholder="Height (cm)">
             <button class="calc-btn" onclick="resBMR()">Calculate BMR</button>`;
             break;
+            case 'water':
+    html = `<h3>Water Intake Calculator</h3>
+            <p style="font-size: 0.9rem; margin-bottom: 10px;">Calculate how much water you should drink daily.</p>
+            <input type="number" id="weight_kg" placeholder="Your Weight (kg)">
+            <select id="activity_level">
+                <option value="0">Normal Activity</option>
+                <option value="350">Moderate Exercise (30 min)</option>
+                <option value="700">Intense Exercise (60 min+)</option>
+            </select>
+            <button class="calc-btn" onclick="resWater()">Calculate Target</button>`;
+            break;
         case 'emi':
             html = `<h3>Loan EMI</h3>
                     <input type="number" id="p" placeholder="Principal Amount">
@@ -128,6 +139,27 @@ const resEMI = () => {
     const p = document.getElementById('p').value, r = document.getElementById('r').value/12/100, t = document.getElementById('t').value*12;
     const emi = Math.round((p * r * Math.pow(1+r, t)) / (Math.pow(1+r, t) - 1));
     document.getElementById('res').innerText = `Monthly EMI: $${emi}`;
+};
+
+const resWater = () => {
+    const weight = parseFloat(document.getElementById('weight_kg').value);
+    const extraWater = parseFloat(document.getElementById('activity_level').value);
+
+    if (weight > 0) {
+        // ওজন অনুযায়ী পানি (ওজন * ০.০৩৩ লিটার)
+        // মিলিমিটারে নিতে ১০০০ দিয়ে গুণ
+        const baseWaterML = weight * 33; 
+        const totalML = baseWaterML + extraWater;
+        const totalLiters = (totalML / 1000).toFixed(2);
+        const glasses = Math.round(totalML / 250); // ২৫০ মিলি এর গ্লাস ধরে
+
+        document.getElementById('res').innerHTML = `
+            Daily Target: <strong>${totalLiters} Liters</strong><br>
+            <small style="color:var(--primary);">Approx. ${glasses} glasses (250ml each)</small>
+        `;
+    } else {
+        document.getElementById('res').innerText = "Please enter a valid weight!";
+    }
 };
 
 const resAge = () => {
